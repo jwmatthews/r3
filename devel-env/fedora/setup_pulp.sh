@@ -7,6 +7,8 @@ systemctl enable mongod
 systemctl start mongod
 
 yum install -y qpid-cpp-server
+echo "auth=no" >> /etc/qpidd.conf
+
 systemctl enable qpidd 
 systemctl start qpidd
 
@@ -28,6 +30,10 @@ systemctl start pulp_resource_manager.service
 
 systemctl enable httpd
 systemctl start httpd
+
+pulp-admin login --username admin --password admin
+pulp-admin rpm repo create --repo-id pulp_unittest --feed http://jmatthews.fedorapeople.org/pulp_unittest/
+pulp-admin rpm repo sync run --repo-id pulp_unittest -bg
 
 echo ""
 echo "======="
