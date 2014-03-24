@@ -1,4 +1,7 @@
 #!/bin/bash
+setenforce 0
+sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
+
 yum install -y mongodb mongodb-server
 systemctl enable mongod
 systemctl start mongod
