@@ -45,6 +45,18 @@ systemctl restart pulp_celerybeat.service
 systemctl restart httpd
 ./create_simple_repo_and_sync.sh
 
+#
+# Creating symlinks for webui which will be filled in later when we run
+# grunt build:debug
+#
+pushd .
+cd /var/lib/pulp/static
+ln -s /vagrant/webui/tmp/result/assets ./assets
+ln -s /vagrant/webui/tmp/result/vendor ./vendor
+ln -s /vagrant/webui/tmp/result/index.html ./index.html
+ln -s /vagrant/webui/tmp/result/config ./config
+popd
+
 echo ""
 echo "======="
 echo "To ssh into your development environment you may either:"
