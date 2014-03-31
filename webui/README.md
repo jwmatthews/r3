@@ -4,7 +4,7 @@ WebUI Prototype for RHUI 3.0
     * [Getting started with ember-app-kit](https://github.com/stefanpenner/ember-app-kit/wiki/Getting-Started)
     * [Introduction to ember-app-kit](http://embersherpa.com/articles/introduction-to-ember-app-kit/)
     * [Deeper Introduction to ember-app-kit](http://blog.safaribooksonline.com/2013/09/18/ember-app-kit/)
-    
+    * [Nice tutorial for ember-app-kit using a RESTAdapter](http://blog.jasonkriss.com/building-an-app-with-ember-app-kit-part-2/)
 
 
 Prerequisites:
