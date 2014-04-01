@@ -1,7 +1,3 @@
-/*
-export default DS.FixtureAdapter.extend();
-*/
-
 var USERNAME = "admin";
 var PASSWORD = "admin";
 
@@ -10,15 +6,13 @@ var ApplicationAdapter = DS.RESTAdapter.extend({
   headers: {
     "Authorization": "Basic " + btoa(USERNAME + ":" + PASSWORD) 
   },
-  pathForType: function(type) {
-    console.log("pathForType invoked with " + type);
-    if (type === "repository") {
-      return "repositories/";
+  buildURL: function(type, id) {
+    var url = this._super(type, id);
+    /* We need the URL to always end with a '/' */
+    if (url.slice(-1) !== '/') {
+      url = url + '/';
     }
-    else {
-      var decamelized = Ember.String.decamelize(type);
-      return Ember.String.pluralize(decamelized);
-    }
+    return url;
   }
 });
 

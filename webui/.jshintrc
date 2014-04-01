@@ -7,14 +7,15 @@
     "Ember": true,
     "Em": true,
     "DS": true,
-    "$": true
+    "$": true,
+    "btoa": true
   },
   "node" : false,
   "browser" : false,
   "boss" : true,
   "curly": false,
   "debug": false,
-  "devel": false,
+  "devel": true,
   "eqeqeq": true,
   "evil": true,
   "forin": false,
