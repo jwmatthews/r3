@@ -13,4 +13,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from cds import app as application
+from rhui_cds import app as application
+
+import rhui_cds
+rhui_cds.initialize()

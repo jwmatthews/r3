@@ -14,14 +14,14 @@
 
 from setuptools import setup, find_packages
 
-setup(name='cds',
+setup(name='rhui_cds',
       version='1.0',
       url='https://github.com/jwmatthews/r3',
       description='CDS replacement for Pulp 2.4',
       license='GPLv2',
 
       author='RHUI Team',
-      author_email='jmatthews@redhat.com',
+      author_email='dgao@redhat.com, jmatthews@redhat.com',
 
       packages=find_packages(),
       test_suite='nose.collector',

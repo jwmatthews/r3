@@ -17,8 +17,8 @@ Exception classes thrown by CDS under error conditions.
 
 from flask import jsonify
 
-class InvalidUsage(Exception):
-    status_code = 400
+class BaseException(Exception):
+    status_code = 500
 
     def __init__(self, message, status_code=None, payload=None):
         Exception.__init__(self)
@@ -30,4 +30,11 @@ class InvalidUsage(Exception):
     def to_dict(self):
         rv = dict(self.payload or ())
         rv['message'] = self.message
-        return rv
+        return rv    
+
+class InvalidUsage(BaseException):
+    status_code = 400
+
+class MissingResource(BaseException):
+    status_code = 404
+
