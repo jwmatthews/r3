@@ -36,6 +36,10 @@ cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 
+mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
+mkdir -p $RPM_BUILD_ROOT/var/lib/pulp-cds
+mkdir -p $RPM_BUILD_ROOT/var/log/pulp
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -46,5 +50,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(750, apache, apache) /srv/pulp/repo_auth.wsgi
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
-#%attr(3775, apache, apache) /var/lib/pulp-cds
-#%attr(3775, apache, apache) /var/log/pulp-cds
+%attr(3775, root, root) %{_sysconfdir}/pki/pulp/content
+%attr(3775, apache, apache) /var/lib/pulp-cds
+%attr(3775, apache, apache) /var/log/pulp-cds
