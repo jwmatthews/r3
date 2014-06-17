@@ -52,4 +52,4 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
 %attr(3775, root, root) %{_sysconfdir}/pki/pulp/content
 %attr(3775, apache, apache) /var/lib/pulp-cds
-%attr(3775, apache, apache) /var/log/pulp-cds
+%attr(3775, apache, apache) /var/log/pulp
