@@ -1,5 +1,5 @@
 Name:           pulp-v2-cds
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        A lightweight distribution system for pulp v2 content. 
 
