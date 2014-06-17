@@ -34,7 +34,7 @@ mkdir -p $RPM_BUILD_ROOT/srv/pulp/
 cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 
 mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
-cp -r src/* $RPM_BUILD_ROOT/src/
+cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
