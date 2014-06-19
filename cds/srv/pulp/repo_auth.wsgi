@@ -13,7 +13,7 @@
 from ConfigParser import SafeConfigParser
 from os import listdir
 from os.path import exists, isfile, join
-from pulp.repo_auth import oid_validation, identity_validation, auth_enabled_validation
+from pulp.cds.repo_auth import oid_validation, identity_validation, auth_enabled_validation
 
 # -- constants --------------------------------------------------------------------
 
