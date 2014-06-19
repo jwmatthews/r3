@@ -11,13 +11,15 @@
 # You should have received a copy of GPLv2 along with this software; if not,
 # see http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
-"""
-Exception classes thrown by CDS under error conditions.
-"""
-
+import logging
 from flask import jsonify
+from mongoengine.errors import OperationError, NotUniqueError
 
-class BaseException(Exception):
+from rhui_cds import app
+
+log = logging.getLogger(__name__)
+
+class ApiException(Exception):
     status_code = 500
 
     def __init__(self, message, status_code=None, payload=None):
@@ -32,9 +34,56 @@ class BaseException(Exception):
         rv['message'] = self.message
         return rv    
 
-class InvalidUsage(BaseException):
+class InvalidUsage(ApiException):
     status_code = 400
 
-class MissingResource(BaseException):
+class MissingResource(ApiException):
     status_code = 404
 
+
+###
+# Order is important for registering the error handlers
+# Order as:  Most Specific exception class to least specific
+###
+@app.errorhandler(ApiException)
+def handle_api_exception(error):
+    log.exception(error)
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
+@app.errorhandler(NotUniqueError)
+def handle_mongoengine_not_unique_error(error):
+    log.exception(error)
+    status_code = 409
+    info = {"message": str(error), "status_code": status_code}
+    response = jsonify(info)
+    response.status_code = status_code
+    return response
+
+@app.errorhandler(OperationError)
+def handle_mongoengine_operation_error(error):
+    log.exception(error)
+    status_code = 400
+    info = {"message": str(error), "status_code": status_code}
+    response = jsonify(info)
+    response.status_code = status_code
+    return response
+
+@app.errorhandler(BaseException)
+def handle_base_exception(error):
+    log.exception(error)
+    status_code = 500
+    info = {"message": str(error), "status_code": status_code}
+    response = jsonify(info)
+    response.status_code = status_code
+    return response
+
+@app.errorhandler(AssertionError)
+def handle_assertion_error(error):
+    log.exception(error)
+    status_code = 400
+    info = {"message": str(error), "status_code": status_code}
+    response = jsonify(info)
+    response.status_code = status_code
+    return response

@@ -29,9 +29,6 @@ from flask import Flask, jsonify, render_template, url_for
 app = Flask(__name__)
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
-config = None # ConfigParser.SafeConfigParser instance
-_config_files = ['/etc/rhui/rhui_cds.conf',]
-
 from rhui_cds.controllers import cds_api
 from rhui_cds.controllers import cds_cluster_api
 
@@ -52,96 +49,62 @@ def site_map():
 ##
 # Configuration
 ##
-_default_values = {
+CONFIG = None # ConfigParser.SafeConfigParser instance
+CONFIG_DEFAULT_FILE = "/etc/rhui/rhui_cds.conf"
+CONFIG_DEFAULT_VALUES = {
     'database': {
         'name': 'rhui_cds',
-        'seeds': 'localhost:27017',
+        'host': 'localhost',
+        'port': '27017',
     },
     'logs': {
         'config': '/etc/rhui/cds/logging.cfg',
     },
 }
 
-def check_config_files():
-    """
-    Check for read permissions on the configuration files. Raise a runtime error
-    if the file doesn't exist or the read permissions are lacking.
-    """
-    for f in _config_files:
-        if not os.access(f, os.F_OK):
-            raise RuntimeError('Cannot find configuration file: %s' % f)
-        if not os.access(f, os.R_OK):
-            raise RuntimeError('Cannot read configuration file: %s' % f)
+def check_config_file(config_file):
+    if not os.access(config_file, os.F_OK):
+        raise RuntimeError('Cannot find configuration file: %s' % config_file)
+    if not os.access(config_file, os.R_OK):
+        raise RuntimeError('Cannot read configuration file: %s' % config_file)
     return True
 
 
-def load_configuration():
-    """
-    Check the configuration files and load the global 'config' object from them.
-    """
-    global config
-    check_config_files()
-    config = SafeConfigParser()
+def load_configuration(config_file):
+    global CONFIG
+    check_config_file(config_file)
+    CONFIG = SafeConfigParser()
     # add the defaults first
-    for section, settings in _default_values.items():
-        config.add_section(section)
+    for section, settings in CONFIG_DEFAULT_VALUES.items():
+        CONFIG.add_section(section)
         for option, value in settings.items():
-            config.set(section, option, value)
+            CONFIG.set(section, option, value)
     # read the config files
-    return config.read(_config_files)
-
-##
-# Logging
-##
-TIME = '%(asctime)s'
-LEVEL = ' [%(levelname)s]'
-THREAD = '[%(threadName)s]'
-FUNCTION = ' %(funcName)s()'
-FILE = ' @ %(filename)s'
-LINE = ':%(lineno)d'
-MSG = ' - %(message)s'
-
-if sys.version_info < (2,5):
-    FUNCTION = ''
-
-FMT = \
-    ''.join((TIME,
-            LEVEL,
-            THREAD,
-            FUNCTION,
-            FILE,
-            LINE,
-            MSG,))
+    return CONFIG.read([config_file])
 
 
-def check_log_file(file_path):
-    """
-    Check the write permissions on log files and their parent directory. Raise
-    a runtime error if the write permissions are lacking.
-    """
-    if os.path.exists(file_path) and not os.access(file_path, os.W_OK):
-        raise RuntimeError('Cannot write to log file: %s' % file_path)
-    dir_path = os.path.dirname(file_path)
-    if not os.access(dir_path, os.W_OK):
-        raise RuntimeError('Cannot write to log directory: %s' % dir_path)
-    return 'Yeah!'
-
-def configure_logging():
-    """
-    Configures logging from config file specified in rhui_cds.conf
-    """
-    log_config_filename = config.get('logs', 'config')
-    if not os.access(log_config_filename, os.R_OK):
-        raise RuntimeError("Unable to read log configuration file: %s" % (log_config_filename))
-    logging.config.fileConfig(log_config_filename)
+def configure_logging(log_config_file):
+    if not os.access(log_config_file, os.R_OK):
+        raise RuntimeError("Unable to read log configuration file: %s" % (log_config_file))
+    logging.config.fileConfig(log_config_file)
 
 
 ##
 # App Initialization
 ##
-def initialize(db_name=None):
-    load_configuration()
-    configure_logging()
-    if not db_name:
-        db_name = config.get("database", "name")
-    db = connect(db_name)
+def initialize(config_file=None):
+    global log
+
+    if not config_file:
+        config_file = CONFIG_DEFAULT_FILE
+    load_configuration(config_file)
+    
+    db_name = CONFIG.get("database", "name")
+    db_host = CONFIG.get("database", "host")
+    db_port = CONFIG.getint("database", "port")
+    log_config_file = CONFIG.get("logs", "config")
+
+    configure_logging(log_config_file)
+    log = logging.getLogger(__name__)
+    db = connect(db_name, host=db_host, port=db_port)
+    log.info("Connected to MongoDB at %s:%s using database name '%s'" % (db_host, db_port, db_name))

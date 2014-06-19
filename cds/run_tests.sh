@@ -1,1 +1,1 @@
-nosetests -w test/managers
+nosetests -w test

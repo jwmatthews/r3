@@ -16,52 +16,66 @@ import logging
 from flask import jsonify, request
 
 from rhui_cds import app
+from rhui_cds.exceptions import *
 from rhui_cds.managers.cds import CDSManager
+from rhui_cds.models.cds import CDS
 
 log = logging.getLogger(__name__)
 
 # This wsgi app is registered at '/pulp/cds' 
 # so this is the prefix to all URLs mentioned below in the route
 
-GET = "GET"
-POST = "POST"
-DELETE = "DELETE"
-PUT = "PUT"
-
 cds_manager = CDSManager()
 
-@app.route("/", methods=[GET])
+def log_request_params():
+    log.info("request.data = <%s>" % (request.data))
+    log.info("request.form = <%s>" % (request.form))
+    log.info("request.args = <%s>" % (request.args))
+    log.info("request.values = <%s>" % (request.values))
+    log.info("request.headers = <%s>" % (request.headers))
+
+@app.route("/", methods=["GET"])
 def list_cdses():
     all_cdses = cds_manager.get_all()
     log.info("all_cdses = %s" % (all_cdses))
-    return jsonify(response=all_cdses)
+    return all_cdses.to_json()
 
-@app.route("/<hostname>/", methods=[POST])
-def create_cds(hostname):
-    log.info("Creating CDS with hostname: %s" % (hostname))
-    c = cds_manager.create(hostname)
-    log.info("CDS created: %s" % (c))
-    return jsonify(response=c)
+@app.route("/", methods=["POST"])
+def create_cds():
+    log_request_params()
+    data = request.get_json(force=True)
+    log.info("Creating CDS with: %s" % (data))
+    cds = cds_manager.create(**data)
+    return cds.to_json()
 
-@app.route("/<hostname>/", methods=[DELETE])
+@app.route("/<hostname>/", methods=["DELETE"])
 def delete_cds(hostname):
     log.info("Delete CDS: '%s'" % (hostname))
-    cds_manager.delete(hostname)
+    ret_val = cds_manager.delete(hostname)
+    return ret_val.to_json()
 
-@app.route("/<hostname>/", methods=[PUT])
+@app.route("/<hostname>/", methods=["PUT"])
 def update_cds(hostname):
-    return "Stub: CDS Update of hostname '%s'" % (hostname)
+    log.info("Update CDS: '%s'" % (hostname))
+    log_request_params()
+    data = request.get_json(force=True)
+    if "hostname" in data.keys():
+        del data["hostname"]
+    cds = cds_manager.update(hostname=hostname, **data)
+    return cds.to_json()
 
-@app.route("/<hostname>/", methods=[GET])
+@app.route("/<hostname>/", methods=["GET"])
 def info_cds(hostname):
     c = cds_manager.get(hostname)
-    return jsonify(c)
+    if not c:
+        raise MissingResource("No CDS with hostname: '%s'" % hostname)
+    return c.to_json()
 
-@app.route("/<hostname>/history", methods=[GET])
+@app.route("/<hostname>/history", methods=["GET"])
 def cds_sync_histories(hostname):
     return "Stub: CDS Sync Histories for hostname '%s'" % (hostname)
 
-@app.route("/<hostname>/sync", methods=[POST])
+@app.route("/<hostname>/sync", methods=["POST"])
 def cds_sync(hostname):
     # Allow limiting what is sync by parameter data
     return "Stub: CDS Sync of hostname '%s'" % (hostname)

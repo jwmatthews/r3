@@ -21,17 +21,30 @@ log = logging.getLogger(__name__)
 
 class CDSManager():
 
-    def create(self, hostname):
-        c = CDS(hostname=hostname)
+    def create(self, **params):
+        """
+        params - dictionary
+        """
+        c = CDS(**params)
         c.save(force_insert=True)
         return c
 
     def delete(self, hostname):
         c = self.get(hostname)
         if not c:
-            return False
+            raise MissingResource("No CDS with hostname: '%s'" % hostname)
         c.delete()
-        return True
+        return c
+
+    def update(self, hostname, **params):
+        c = self.get(hostname)
+        if not c:
+            raise MissingResource("No CDS with hostname: '%s'" % hostname)
+        for k in params.keys():
+            c[k] = data[k]
+        c.save()
+        cdses = CDS.objects(hostname=hostname)
+        return cdses[0]
 
     def get(self, hostname):
         c = CDS.objects(hostname=hostname)

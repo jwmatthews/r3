@@ -12,10 +12,14 @@
 # You should have received a copy of GPLv2 along with this software;
 # if not, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
+from datetime import datetime
+
 from mongoengine import *
 
 class Cluster(Document):
     id = StringField(required=True, unique=True, primary_key=True)
     cdses = ListField(StringField)
+    created_at = DateTimeField(required=True, default=datetime.utcnow())
+    updated_at = DateTimeField(required=True)
     meta = {'collection': 'cluster'}
 
