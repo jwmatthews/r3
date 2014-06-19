@@ -12,6 +12,7 @@ BuildArch:      noarch
 BuildRequires:  rpm-python
 
 Requires: mod_wsgi
+Requires: mod_ssl
 
 %description
 A lightweight distribution system for pulp v2 content.
@@ -47,9 +48,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,apache,apache,-)
 %{python_sitelib}/pulp/cds/
 %attr(775, apache, apache) /srv/pulp
+%attr(750, apache, apache) /srv/pulp/cds_api.wsgi
+%attr(750, apache, apache) /srv/pulp/lb.wsgi
 %attr(750, apache, apache) /srv/pulp/repo_auth.wsgi
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
 %attr(3775, root, root) %{_sysconfdir}/pki/pulp/content
 %attr(3775, apache, apache) /var/lib/pulp-cds
 %attr(3775, apache, apache) /var/log/pulp
+
+# EDIT SELINUX CONTEXT FOR WSGI
