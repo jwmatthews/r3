@@ -52,7 +52,8 @@ import os
 from glob import glob
 from M2Crypto import X509, BIO
 
-LOG = logging.getLogger(__name__)
+h = NullHandler()
+LOG = logging.getLogger(__name__).addHandler(h)
 try:
     from M2Crypto.X509 import CRL_Stack
     M2CRYPTO_HAS_CRL_SUPPORT = True
@@ -71,6 +72,11 @@ EMPTY_BUNDLE = dict([(key, None) for key in VALID_BUNDLE_KEYS])
 WRITE_LOCK = RLock()
 
 GLOBAL_BUNDLE_PREFIX = 'pulp-global-repo'
+
+# Workaround for python 2.6 w/o built-in NullHandler
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
 
 class RepoCertUtils:
 
