@@ -37,7 +37,9 @@ cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 
-mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
+mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp
+cp -r etc/pki/pulp/* .
+
 mkdir -p $RPM_BUILD_ROOT/var/lib/pulp-cds
 mkdir -p $RPM_BUILD_ROOT/var/log/pulp
 
@@ -47,6 +49,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,apache,apache,-)
 %{python_sitelib}/pulp/cds/
+%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/
+%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/content
 %attr(775, apache, apache) /srv/pulp
 %attr(750, apache, apache) /srv/pulp/cds_api.wsgi
 %attr(750, apache, apache) /srv/pulp/lb.wsgi
