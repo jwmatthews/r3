@@ -13,7 +13,7 @@
 from ConfigParser import SafeConfigParser
 from os import listdir
 from os.path import exists, isfile, join
-from pulp.cds.repo_auth import oid_validation, identity_validation, auth_enabled_validation
+from pulp.repo_auth import oid_validation, identity_validation, auth_enabled_validation
 
 # -- constants --------------------------------------------------------------------
 
@@ -115,4 +115,5 @@ def _load_plugins(environ):
             
             module = parent.__dict__[module_name]
             if 'authenticate' in dir(module):
-                REQUIRED_PLUGINS.append(module.authenticate)
+                if module.authenticate not in REQUIRED_PLUGINS:
+                    REQUIRED_PLUGINS.append(module.authenticate)
