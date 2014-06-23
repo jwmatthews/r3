@@ -1,1 +1,1 @@
-nosetests -w test
+nosetests -w test/unit

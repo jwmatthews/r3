@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../")
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../../")
 
 if sys.version_info < (2,7):
     # python 2.6
