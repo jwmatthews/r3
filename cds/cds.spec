@@ -38,7 +38,7 @@ mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 
 mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp
-cp -r etc/pki/pulp/* .
+cp -r etc/pki/pulp/* $RPM_BUILD_ROOT/etc/pki/pulp
 
 mkdir -p $RPM_BUILD_ROOT/var/lib/pulp-cds
 mkdir -p $RPM_BUILD_ROOT/var/log/pulp
