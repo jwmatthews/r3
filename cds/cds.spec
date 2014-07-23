@@ -48,17 +48,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,apache,apache,-)
-%{python_sitelib}/pulp/__init__.py
-%{python_sitelib}/pulp/cds/
-%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/
-%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/content
+#%{python_sitelib}/pulp/__init__.py
+%{python_sitelib}/pulp/
+#%{python_sitelib}/pulp/cds/
+#%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/
 %attr(775, apache, apache) /srv/pulp
-%attr(750, apache, apache) /srv/pulp/cds_api.wsgi
-%attr(750, apache, apache) /srv/pulp/lb.wsgi
-%attr(750, apache, apache) /srv/pulp/repo_auth.wsgi
+#%attr(750, apache, apache) /srv/pulp/cds_api.wsgi
+#%attr(750, apache, apache) /srv/pulp/lb.wsgi
+#%attr(750, apache, apache) /srv/pulp/repo_auth.wsgi
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
-%attr(3775, root, root) %{_sysconfdir}/pki/pulp/content
+%attr(3775, root, root) %{_sysconfdir}/pki/pulp/
 %attr(3775, apache, apache) /var/lib/pulp
 %attr(3775, apache, apache) /var/log/pulp
 
