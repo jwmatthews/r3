@@ -34,8 +34,8 @@ cp etc/pulp/repo_auth.conf $RPM_BUILD_ROOT/etc/pulp/
 mkdir -p $RPM_BUILD_ROOT/srv/pulp/
 cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 
-mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
-cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
+mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
+cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
 
 mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
 #cp -r etc/pki/pulp/* $RPM_BUILD_ROOT/etc/pki/pulp
