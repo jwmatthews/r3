@@ -40,7 +40,7 @@ cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
 #cp -r etc/pki/pulp/* $RPM_BUILD_ROOT/etc/pki/pulp
 
-mkdir -p $RPM_BUILD_ROOT/var/lib/pulp-cds
+mkdir -p $RPM_BUILD_ROOT/var/lib/pulp
 mkdir -p $RPM_BUILD_ROOT/var/log/pulp
 
 %clean
@@ -48,6 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,apache,apache,-)
+%{python_sitelib}/pulp/__init__.py
 %{python_sitelib}/pulp/cds/
 %attr(775, apache, apache) %{_sysconfdir}/pki/pulp/
 %attr(775, apache, apache) %{_sysconfdir}/pki/pulp/content
@@ -58,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
 %attr(3775, root, root) %{_sysconfdir}/pki/pulp/content
-%attr(3775, apache, apache) /var/lib/pulp-cds
+%attr(3775, apache, apache) /var/lib/pulp
 %attr(3775, apache, apache) /var/log/pulp
 
 # EDIT SELINUX CONTEXT FOR WSGI
@@ -66,30 +67,6 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue Jul 22 2014 David Gao <jinmaster923@gmail.com> 1.0.2-1
 - Bumping version to 1.0.1 (jinmaster923@gmail.com)
-- Initial update for producing rsync list based on repo ids provided.
-  (jinmaster923@gmail.com)
-- Adding test code for generating a list of files to rsync
-  (jwmatthews@gmail.com)
-- Moved cds unit tests to unit dir, so we may introduce integration tests
-  (jwmatthews@gmail.com)
-- Restructing unit tests for CDS (jwmatthews@gmail.com)
-- Created /etc/pki/pulp/content folder (jinmaster923@gmail.com)
-- Update to the latest version of repo_auth.wsgi (jinmaster923@gmail.com)
-- Corrected some python errors (jinmaster923@gmail.com)
-- Corrected new import path (jinmaster923@gmail.com)
-- Initial modifications for permission issues. (jinmaster923@gmail.com)
-- Added lb.wsgi Added NullHandler to handle situations where apache does not
-  have logging handler. (jinmaster923@gmail.com)
-- Re-add lb content back to conf file (jinmaster923@gmail.com)
-- Correct typo (jinmaster923@gmail.com)
-- Removed cds api section in pulp-cds.conf Added paths needed to be used for
-  CDS (jinmaster923@gmail.com)
-- Oops, correct cp path mistake from last commit (jinmaster923@gmail.com)
-- Added python src files. (jinmaster923@gmail.com)
-- Automatic commit of package [pulp-v2-cds] release [1.0.1-1].
-  (jinmaster923@gmail.com)
-- Initial commit for cds rpm work. (jinmaster923@gmail.com)
-- Initialized to use tito. (jinmaster923@gmail.com)
 
 * Tue Jul 22 2014 David Gao <jinmaster923@gmail.com>
 - Initial update for producing rsync list based on repo ids provided.
