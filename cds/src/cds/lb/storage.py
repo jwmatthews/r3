@@ -24,8 +24,8 @@ from threading import RLock
 
 LOG = logging.getLogger(__name__)
 
-DEFAULT_FILE_LOCK = '/var/lib/pulp-cds/.cluster-members-lock'
-DEFAULT_FILE_STORE = '/var/lib/pulp-cds/.cluster-members'
+DEFAULT_FILE_LOCK = '/var/lib/pulp/.cluster-members-lock'
+DEFAULT_FILE_STORE = '/var/lib/pulp/.cluster-members'
 
 # -- storage implementations ---------------------------------------------------
 

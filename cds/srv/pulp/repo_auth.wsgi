@@ -108,7 +108,7 @@ def _load_plugins(environ):
         for f in filenames:
             module_name = f[:-3]
             try:
-                parent = __import__('pulp.repo_auth', globals(), locals(), [module_name], -1)
+                parent = __import__('pulp.cds.repo_auth', globals(), locals(), [module_name], -1)
             except ImportError, e:
                 environ["wsgi.errors"].write("Could not import any plugins from %s. Import error was: '%s'" % (module_name, e))
                 continue
