@@ -38,7 +38,6 @@ mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
 cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
 
 mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
-#cp -r etc/pki/pulp/* $RPM_BUILD_ROOT/etc/pki/pulp
 
 mkdir -p $RPM_BUILD_ROOT/var/lib/pulp
 mkdir -p $RPM_BUILD_ROOT/var/log/pulp
@@ -48,21 +47,28 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,apache,apache,-)
-#%{python_sitelib}/pulp/__init__.py
 %{python_sitelib}/pulp/
-#%{python_sitelib}/pulp/cds/
-#%attr(775, apache, apache) %{_sysconfdir}/pki/pulp/
 %attr(775, apache, apache) /srv/pulp
-#%attr(750, apache, apache) /srv/pulp/cds_api.wsgi
-#%attr(750, apache, apache) /srv/pulp/lb.wsgi
-#%attr(750, apache, apache) /srv/pulp/repo_auth.wsgi
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
 %attr(3775, root, root) %{_sysconfdir}/pki/pulp/
 %attr(3775, apache, apache) /var/lib/pulp
 %attr(3775, apache, apache) /var/log/pulp
 
-# EDIT SELINUX CONTEXT FOR WSGI
+%post
+semanage fcontext -a -t httpd_sys_rw_content_t '/var/lib/pulp(/.*)?'
+restorecon -Rv /var/lib/pulp/*
+
+touch /var/lib/pulp/.cluster-members
+touch /var/lib/pulp/.cluster-members-lock
+
+chown apache:apache /var/lib/pulp-cds/.cluster-members-lock
+chown apache:apache /var/lib/pulp-cds/.cluster-members
+
+%postun
+if [ $1 -eq 0] ; then # final removal
+semanage fcontext -d -t httpd_sys_rw_content_t '/var/lib/pulp(/.*)?'
+fi
 
 %changelog
 * Tue Jul 22 2014 David Gao <jinmaster923@gmail.com> 1.0.2-1
