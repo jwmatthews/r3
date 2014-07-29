@@ -59,8 +59,8 @@ rm -rf $RPM_BUILD_ROOT
 touch /var/lib/pulp/.cluster-members
 touch /var/lib/pulp/.cluster-members-lock
 
-chown apache:apache /var/lib/pulp-cds/.cluster-members-lock
-chown apache:apache /var/lib/pulp-cds/.cluster-members
+chown apache:apache /var/lib/pulp/.cluster-members-lock
+chown apache:apache /var/lib/pulp/.cluster-members
 
 semanage fcontext -a -t httpd_user_rw_content_t '/var/lib/pulp(/.*)?'
 semanage fcontext -a -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
