@@ -56,14 +56,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(3775, apache, apache) /var/log/pulp
 
 %post
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/lib/pulp(/.*)?'
-restorecon -Rv /var/lib/pulp/*
-
 touch /var/lib/pulp/.cluster-members
 touch /var/lib/pulp/.cluster-members-lock
 
 chown apache:apache /var/lib/pulp-cds/.cluster-members-lock
 chown apache:apache /var/lib/pulp-cds/.cluster-members
+
+semanage fcontext -a -t httpd_user_rw_content_t '/var/lib/pulp(/.*)?'
+semanage fcontext -a -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
+restorecon -Rv /var/lib/pulp/*
+restorecon -Rv /srv/pulp/*
 
 %postun
 if [ $1 -eq 0] ; then # final removal
