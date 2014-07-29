@@ -1,5 +1,5 @@
 Name:           pulp-v2-cds
-Version:        1.0.2
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        A lightweight distribution system for pulp v2 content. 
 
@@ -73,6 +73,21 @@ semanage fcontext -d -t httpd_sys_rw_content_t '/var/lib/pulp(/.*)?'
 fi
 
 %changelog
+* Tue Jul 29 2014 David Gao <jinmaster923@gmail.com> 1.0.3-1
+- Oops forgot to modify path for .cluster-membership and .cluster-membership-
+  lock chown cmd (jinmaster923@gmail.com)
+- Added additional selinux rule for /srv/pulp (jinmaster923@gmail.com)
+- Added selinux rules to spec file. (jinmaster923@gmail.com)
+- Update import paths (jinmaster923@gmail.com)
+- Reorganize %%file section to remove files that are listed twice.
+  (jinmaster923@gmail.com)
+- Moved all code to src/cds folder. Adjusted cds.spec accordingly.
+  (jinmaster923@gmail.com)
+- Change location from /var/lib/pulp-cds to /var/lib/pulp
+  (jinmaster923@gmail.com)
+- More changes to etc/pki/pulp/content folder. (jinmaster923@gmail.com)
+- Corect cp error for etc/pki/pulp/content folder. (jinmaster923@gmail.com)
+
 * Tue Jul 22 2014 David Gao <jinmaster923@gmail.com> 1.0.2-1
 - Bumping version to 1.0.1 (jinmaster923@gmail.com)
 
