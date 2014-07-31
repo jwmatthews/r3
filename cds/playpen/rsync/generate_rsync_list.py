@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import copy
 import os
 import socket
 import sys
@@ -63,11 +64,11 @@ def read_dir(path):
                 empty_dirs.append(full_path)
     return links, files, empty_dirs, seen
 
-def process_path(path):
+def process_path(path, seen):
     known_links = set()
     known_files = set()
     known_empty_dirs = set()
-    seen = set()
+    #seen = set()
     path_queue = Queue()
     path_queue.put(path)
 
@@ -107,8 +108,22 @@ def process_path(path):
 
     return known_links, known_files, known_empty_dirs, seen
 
+def find_file(from_path, to_path, search_glob):
+    result_files = set()
+    seen = set()
+    for root, dirs, files in os.walk(from_path):
+        if not to_path.startswith(root): # path deviated from to path, ignore...
+            continue
+        else:
+            for f in files:
+                if f.endswith(search_glob):
+                    full_file = os.path.abspath("%s/%s" % (root, f))
+                    result_files.add(full_file)
+                    seen = update_seen(full_file, seen)
+    return result_files, seen
+
 def write_output_file(links, files, empty_dirs, out_filename):
-    f = open(out_filename, "w")
+    f = open(out_filename, "a")
     for entry in links:
         f.write("%s\n" % (entry))
     f.write("\n")
@@ -145,6 +160,46 @@ def get_repo_relative_paths(repo_ids, source_path):
            
     return relative_paths
 
+def order(links, files, empty_dirs, seen):
+
+    # Make a deep copy of existing sets
+    links_copy = copy.deepcopy(links)
+    files_copy = copy.deepcopy(files)
+    empty_dirs_copy = copy.deepcopy(empty_dirs)
+    seen_copy = copy.deepcopy(seen)
+    repodata_links = set()
+    repodata_files = set()
+
+    for entry in links:
+        if 'repodata' in entry:
+            repodata_links.add(entry)
+            links_copy.remove(entry)
+    for entry in files:
+        if 'repodata' in entry:
+            repodata_files.add(entry)
+            files_copy.remove(entry)
+
+    # now reorder repodata file
+    repodata_files_copy = copy.deepcopy(repodata_files)
+    repomd_xml = ""
+    for entry in repodata_files:
+        if "repomd.xml" in entry:
+            repodata_files_copy.remove(entry)
+            repomd_xml = entry
+
+    # combine
+    # turn items into list so they won't be out of order
+    repodata_files_copy = list(repodata_files_copy)
+    repodata_links = list(repodata_links)
+    files_copy = list(files_copy)
+    links_copy = list(links_copy)
+
+    repodata_files_copy.append(repomd_xml)
+    files_copy.extend(repodata_files_copy)
+    links_copy.extend(repodata_links)
+
+    return links_copy, files_copy, empty_dirs_copy, seen_copy
+
 def print_outputs(out_filename, files, empty_dirs, links):
     print "Results written to: %s" % (out_filename)
     print "Found:"
@@ -158,6 +213,11 @@ if __name__ == "__main__":
     out_filename = opts.out_filename
     source_path = opts.source
     repo_ids = opts.repo_ids
+    
+    if os.path.exists(out_filename):
+        print "Removing old output file %s. " % out_filename
+        os.remove(out_filename)
+
     if source_path == None and repo_ids == None:
         parser.print_help()
         print "Please re-run with a source path or repo ids provided"
@@ -165,23 +225,45 @@ if __name__ == "__main__":
     else:
         if repo_ids == None:
             print "No repo-id specified, processing entire %s directory." % source_path
-            links, files, empty_dirs, seen = process_path(source_path)
+            links, files, empty_dirs, seen = process_path(source_path, set())
+            links, files, empty_dirs, seen = order(links, files, empty_dirs, seen) #Note: this will turn links, files into lists from sets
             write_output_file(links, files, empty_dirs, out_filename)
             print_outputs(out_filename, files, empty_dirs, links)
         else:
+            # Need for collective all_links to remove duplications
             all_links = set()
             all_files = set()
             all_empty_dirs = set()
             all_seen = set()
+
+            ordered_links = []
+            ordered_files = []
+
             for repo_source_path in get_repo_relative_paths(repo_ids, source_path):
+                # Clean up path
+                repo_source_path = os.path.abspath(repo_source_path)
+
                 print "Processing repo path %s." % repo_source_path
-                links, files, empty_dirs, seen = process_path(repo_source_path)
-                # combine links, files, empty_dirs, seen with previous results
+                links, files, empty_dirs, seen = process_path(repo_source_path, all_seen)
+
+                # Handle listing files
+                listing_files, listing_seen = find_file(source_path, repo_source_path, "listing") # we only want listing files that are related to repo paths, not anything outside...
+                files.update(listing_files)
+                seen.update(listing_seen)
+
+                links = all_links.union(links) # Is this really necessary now that we've passing in all_seen to process_path?
+                files = all_files.union(files)
+
                 all_links.update(links)
                 all_files.update(files)
                 all_empty_dirs.update(empty_dirs)
                 all_seen.update(seen)
-            write_output_file(all_links, all_files, all_empty_dirs, out_filename)
-            print_outputs(out_filename, all_files, all_empty_dirs, all_links)
-                 
+
+                links, files, empty_dirs, seen = order(links, files, empty_dirs, seen) #Note: this will turn links, files into lists from sets
+                    
+                ordered_links.extend(links)
+                ordered_files.extend(files)
+
+            write_output_file(ordered_links, ordered_files, all_empty_dirs, out_filename)
+            print_outputs(out_filename, ordered_files, all_empty_dirs, ordered_links)
 
