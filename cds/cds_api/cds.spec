@@ -1,5 +1,5 @@
 Name:           pulp-v2-cds-server
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        Server plugin for pulp v2 server to distribute content.
 
@@ -60,3 +60,6 @@ semanage fcontext -d -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
 fi
 
 %changelog
+* Thu Aug 07 2014 David Gao <jinmaster923@gmail.com> 1.0.1-1
+- new package built with tito
+
