@@ -30,7 +30,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/httpd/conf.d
 cp etc/httpd/conf.d/cds_api.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/
 
 mkdir -p $RPM_BUILD_ROOT/etc/rhui
-cp -r etc/rhui $RPM_BUILD_ROOT/etc/rhui/
+cp -r etc/rhui/* $RPM_BUILD_ROOT/etc/rhui/
 
 mkdir -p $RPM_BUILD_ROOT/srv/pulp/
 cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
@@ -48,6 +48,8 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/pulp/
 %attr(775, apache, apache) /srv/pulp
 %config %{_sysconfdir}/httpd/conf.d/cds_api.conf
+%config %{_sysconfdir}/rhui/rhui_cds.conf
+%config %{_sysconfdir}/rhui/cds/logging.cfg
 %attr(3775, apache, apache) /var/log/pulp
 
 %post
