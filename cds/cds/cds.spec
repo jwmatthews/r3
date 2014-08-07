@@ -13,6 +13,7 @@ BuildRequires:  rpm-python
 
 Requires: mod_wsgi
 Requires: mod_ssl
+Conflicts: pulp-v2-cds-server
 
 %description
 A lightweight distribution system for pulp v2 content.
@@ -69,7 +70,8 @@ restorecon -Rv /srv/pulp/*
 
 %postun
 if [ $1 -eq 0] ; then # final removal
-semanage fcontext -d -t httpd_sys_rw_content_t '/var/lib/pulp(/.*)?'
+semanage fcontext -d -t httpd_user_rw_content_t '/var/lib/pulp(/.*)?'
+semanage fcontext -d -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
 fi
 
 %changelog
