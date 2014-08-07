@@ -35,8 +35,8 @@ cp -r etc/rhui/* $RPM_BUILD_ROOT/etc/rhui/
 mkdir -p $RPM_BUILD_ROOT/srv/pulp/
 cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 
-mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
-cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
+mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
+cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/cds/
 
 mkdir -p $RPM_BUILD_ROOT/var/log/pulp
 
@@ -45,7 +45,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,apache,apache,-)
-%{python_sitelib}/pulp/
+%{python_sitelib}/pulp/cds/
 %attr(775, apache, apache) /srv/pulp
 %config %{_sysconfdir}/httpd/conf.d/cds_api.conf
 %config %{_sysconfdir}/rhui/rhui_cds.conf
