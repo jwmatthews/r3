@@ -11,7 +11,7 @@ from mongoengine.errors import NotUniqueError
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../")
 import base
 
-from rhui_cds.models.cds import CDS
+from pulp.cds.models.cds import CDS
 
 log = logging.getLogger(__name__)
 

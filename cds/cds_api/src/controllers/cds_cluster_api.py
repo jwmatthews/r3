@@ -15,7 +15,7 @@
 
 from flask import request
 
-from rhui_cds import app
+from pulp.cds import app
 
 # This wsgi app is registered at '/pulp/cds' 
 # so this is the prefix to all URLs mentioned below in the route

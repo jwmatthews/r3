@@ -14,8 +14,8 @@
 
 import logging
 
-from rhui_cds.exceptions import *
-from rhui_cds.models.cds import CDS
+from pulp.cds.exceptions import *
+from pulp.cds.models.cds import CDS
 
 log = logging.getLogger(__name__)
 

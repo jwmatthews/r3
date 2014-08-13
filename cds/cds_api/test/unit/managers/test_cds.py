@@ -7,7 +7,7 @@ from mongoengine.errors import NotUniqueError
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../")
 import base
 
-from rhui_cds.managers.cds import CDSManager
+from pulp.cds.managers.cds import CDSManager
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class TestCDSManager(base.BaseTestCase):
         c = self.cds_manager.create(hostname=hostname)
         self.assertIsNotNone(c)
 
-        from rhui_cds.models.cds import CDS
+        from pulp.cds.models.cds import CDS
         found = CDS.objects(hostname=hostname)
         self.assertEquals(found[0], c)
 
@@ -55,7 +55,7 @@ class TestCDSManager(base.BaseTestCase):
         hostname = "cds1.example.com"
         c = self.cds_manager.create(hostname=hostname)
 
-        from rhui_cds.models.cds import CDS
+        from pulp.cds.models.cds import CDS
         found = CDS.objects(hostname=hostname)
         self.assertEquals(found[0], c)
 
