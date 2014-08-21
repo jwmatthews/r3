@@ -17,6 +17,7 @@ from mongoengine import *
 
 class CDS(Document):
     hostname = StringField(required=True, unique=True)
+    description = StringField(required=False)
     created_at = DateTimeField(required=True, default=datetime.utcnow())
     updated_at = DateTimeField(required=True)
     meta = {'collection': 'cds'}

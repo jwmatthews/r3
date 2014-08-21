@@ -13,7 +13,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from pulp.cds import app as application
+from pulp_cds.cds import app as application
 
-import pulp.cds
-pulp.cds.initialize()
+import pulp_cds.cds
+pulp_cds.cds.initialize()

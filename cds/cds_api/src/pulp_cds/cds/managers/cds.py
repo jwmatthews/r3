@@ -14,8 +14,8 @@
 
 import logging
 
-from pulp.cds.exceptions import *
-from pulp.cds.models.cds import CDS
+from pulp_cds.cds.exceptions import *
+from pulp_cds.cds.models.cds import CDS
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class CDSManager():
         if not c:
             raise MissingResource("No CDS with hostname: '%s'" % hostname)
         for k in params.keys():
-            c[k] = data[k]
+            c[k] = params[k]
         c.save()
         cdses = CDS.objects(hostname=hostname)
         return cdses[0]

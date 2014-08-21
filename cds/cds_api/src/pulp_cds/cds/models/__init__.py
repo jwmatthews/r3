@@ -3,8 +3,8 @@ from datetime import datetime
 from mongoengine import *
 from mongoengine import signals
 
-from pulp.cds.models.cds import CDS
-from pulp.cds.models.cds_cluster import Cluster 
+from pulp_cds.cds.models.cds import CDS
+from pulp_cds.cds.models.cds_cluster import Cluster 
 
 def update_timestamp(sender, document, **kwargs):
     document.updated_at = datetime.utcnow()

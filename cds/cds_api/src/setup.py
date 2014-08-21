@@ -14,7 +14,7 @@
 
 from setuptools import setup, find_packages
 
-setup(name='rhui_cds',
+setup(name='pulp_cds',
       version='1.0.1',
       url='https://github.com/jwmatthews/r3',
       description='CDS replacement for Pulp 2.4',

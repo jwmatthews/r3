@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../../")
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)) + "/../../src")
 
 if sys.version_info < (2,7):
     # python 2.6
@@ -9,13 +9,13 @@ else:
     # python 2.7 and greater
     import unittest
 
-from pulp.cds import initialize
-from pulp.cds.models.cds import CDS
-from pulp.cds.models.cds_cluster import Cluster
+from pulp_cds.cds import initialize
+from pulp_cds.cds.models.cds import CDS
+from pulp_cds.cds.models.cds_cluster import Cluster
 
-import pulp.cds
+import pulp_cds.cds
 config_file_for_unittests = os.path.join(os.path.abspath(os.path.dirname(__file__)), "./config/unittests.conf")
-pulp.cds._config_files = [config_file_for_unittests]
+pulp_cds.cds._config_files = [config_file_for_unittests]
 
 CONFIG_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "config/unittests.cfg")
 
@@ -28,9 +28,9 @@ class BaseTestCase(unittest.TestCase):
         Cluster.drop_collection()
 
     def setUp(self):
-        pulp.cds.app.config['TESTING'] = True
-        pulp.cds.initialize(CONFIG_FILE)
-        self.app = pulp.cds.app.test_client()
+        pulp_cds.cds.app.config['TESTING'] = True
+        pulp_cds.cds.initialize(CONFIG_FILE)
+        self.app = pulp_cds.cds.app.test_client()
         self.drop_collections()
 
     def tearDown(self):

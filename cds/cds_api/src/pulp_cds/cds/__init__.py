@@ -29,8 +29,8 @@ from flask import Flask, jsonify, render_template, url_for
 app = Flask(__name__)
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
-from pulp.cds.controllers import cds_api
-from pulp.cds.controllers import cds_cluster_api
+from pulp_cds.cds.controllers import cds_api
+from pulp_cds.cds.controllers import cds_cluster_api
 
 @app.route("/site-map")
 def site_map():

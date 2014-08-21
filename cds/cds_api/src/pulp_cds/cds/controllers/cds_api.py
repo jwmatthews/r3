@@ -15,10 +15,10 @@
 import logging
 from flask import jsonify, request
 
-from pulp.cds import app
-from pulp.cds.exceptions import *
-from pulp.cds.managers.cds import CDSManager
-from pulp.cds.models.cds import CDS
+from pulp_cds.cds import app
+from pulp_cds.cds.exceptions import *
+from pulp_cds.cds.managers.cds import CDSManager
+from pulp_cds.cds.models.cds import CDS
 
 log = logging.getLogger(__name__)
 

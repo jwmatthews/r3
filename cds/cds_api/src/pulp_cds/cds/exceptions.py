@@ -15,7 +15,7 @@ import logging
 from flask import jsonify
 from mongoengine.errors import OperationError, NotUniqueError
 
-from pulp.cds import app
+from pulp_cds.cds import app
 
 log = logging.getLogger(__name__)
 
