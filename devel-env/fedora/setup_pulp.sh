@@ -6,7 +6,7 @@ yum install -y mongodb mongodb-server
 systemctl enable mongod
 systemctl restart mongod
 
-yum install -y qpid-cpp-server
+yum install -y qpid-cpp-server python-qpid-qmf
 echo "auth=no" >> /etc/qpidd.conf
 
 yum install -y wget
