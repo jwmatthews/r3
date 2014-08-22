@@ -17,9 +17,10 @@ from datetime import datetime
 from mongoengine import *
 
 class Cluster(Document):
-    id = StringField(required=True, unique=True, primary_key=True)
+    #cluster_id = StringField(required=True, unique=True, primary_key=True)
+    cluster_id = StringField(required=True, unique=True)
     cdses = ListField(StringField)
     created_at = DateTimeField(required=True, default=datetime.utcnow())
-    updated_at = DateTimeField(required=True)
+    sync_schedule = StringField(required=False)
     meta = {'collection': 'cluster'}
 

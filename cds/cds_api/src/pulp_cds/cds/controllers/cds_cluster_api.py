@@ -16,17 +16,37 @@
 from flask import request
 
 from pulp_cds.cds import app
+from pulp_cds.cds.exceptions import *
+from pulp_cds.cds.managers.cds_cluster import CDSClusterManager
+from pulp_cds.cds.models.cds_cluster import Cluster
 
-# This wsgi app is registered at '/pulp/cds' 
+log = logging.getLogger(__name__)
+
+# This wsgi app is registered at '/pulp/cds/cluster' 
 # so this is the prefix to all URLs mentioned below in the route
 
-@app.route("/cluster", methods=["GET"])
-def list_clusters():
-    return "Stub: List All CDS Clusters"
+cluster_manager = CDSClusterManager()
 
-@app.route("/cluster/<cluster_id>/", methods=["POST"])
-def create_cluster(cluster_id):
-    return "Stub: CDS Cluster Created with cluster_id '%s'" % (cluster_id)
+def log_request_params():
+    log.info("request.data = <%s>" % (request.data))
+    log.info("request.form = <%s>" % (request.form))
+    log.info("request.args = <%s>" % (request.args))
+    log.info("request.values = <%s>" % (request.values))
+    log.info("request.headers = <%s>" % (request.headers))
+
+@app.route("/cluster/", methods=["GET"])
+def list_clusters():
+    all_clusters = cluster_manager.get_all()
+    log.info("all_clusters = %s" % (all_clusters))
+    return all_clusters.to_json()
+
+@app.route("/cluster/", methods=["POST"])
+def create_cluster():
+    log_request_params()
+    data = request.get_json(force=True)
+    log.info("Creating Cluster with: %s" % (data))
+    cluster = cluster_manager.create(**data)
+    return cluster.to_json()
 
 @app.route("/cluster/<cluster_id>/", methods=["DELETE"])
 def delete_cluster(cluster_id):
