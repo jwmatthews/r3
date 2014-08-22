@@ -19,6 +19,7 @@ class CDS(Document):
     hostname = StringField(required=True, unique=True)
     description = StringField(required=False)
     created_at = DateTimeField(required=True, default=datetime.utcnow())
-    updated_at = DateTimeField(required=True)
+    sync_schedule = StringField(required=False)
+    cluster_id = StringField(required=True)
     meta = {'collection': 'cds'}
 

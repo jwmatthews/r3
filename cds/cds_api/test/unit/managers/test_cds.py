@@ -25,8 +25,9 @@ class TestCDSManager(base.BaseTestCase):
         self.assertEquals(len(found), 0)
 
         hostnames = ["cds1.example.com", "cds2.example.com"]
+        cluster_id = "unit_test_cluster"
         for h in hostnames:
-            self.cds_manager.create(hostname=h)
+            self.cds_manager.create(hostname=h, cluster_id=cluster_id)
 
         found = self.cds_manager.get_all()
         self.assertEquals(len(found), 2)
@@ -36,7 +37,8 @@ class TestCDSManager(base.BaseTestCase):
 
     def test_simple_create(self):
         hostname = "cds1.example.com"
-        c = self.cds_manager.create(hostname=hostname)
+        cluster_id = "unit_test_cluster"
+        c = self.cds_manager.create(hostname=hostname, cluster_id=cluster_id)
         self.assertIsNotNone(c)
 
         from pulp_cds.cds.models.cds import CDS
@@ -45,15 +47,17 @@ class TestCDSManager(base.BaseTestCase):
 
     def test_create_cds_already_exists(self):
         hostname = "cds1.example.com"
-        c = self.cds_manager.create(hostname=hostname)
+        cluster_id = "unit_test_cluster"
+        c = self.cds_manager.create(hostname=hostname, cluster_id=cluster_id)
         self.assertIsNotNone(c)
 
         self.assertRaises(NotUniqueError,
-                lambda: self.cds_manager.create(hostname=hostname))
+                lambda: self.cds_manager.create(hostname=hostname, cluster_id=cluster_id))
 
     def test_delete(self):
         hostname = "cds1.example.com"
-        c = self.cds_manager.create(hostname=hostname)
+        cluster_id = "unit_test_cluster"
+        c = self.cds_manager.create(hostname=hostname, cluster_id=cluster_id)
 
         from pulp_cds.cds.models.cds import CDS
         found = CDS.objects(hostname=hostname)
@@ -65,10 +69,11 @@ class TestCDSManager(base.BaseTestCase):
 
     def test_get(self):
         hostname = "cds1.example.com"
+        cluster_id = "unit_test_cluster"
         found = self.cds_manager.get(hostname=hostname)
         self.assertIsNone(found)
 
-        created = self.cds_manager.create(hostname=hostname)
+        created = self.cds_manager.create(hostname=hostname, cluster_id=cluster_id)
         found = self.cds_manager.get(hostname=hostname)
         self.assertEquals(created, found)
 
