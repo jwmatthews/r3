@@ -17,6 +17,7 @@ from flask import request
 
 from pulp_cds.cds import app
 from pulp_cds.cds.exceptions import *
+from pulp_cds.cds.managers.cds import CDSManager
 from pulp_cds.cds.managers.cds_cluster import CDSClusterManager
 from pulp_cds.cds.models.cds_cluster import Cluster
 
@@ -25,6 +26,7 @@ log = logging.getLogger(__name__)
 # This wsgi app is registered at '/pulp/cds/cluster' 
 # so this is the prefix to all URLs mentioned below in the route
 
+cds_manager = CDSManager()
 cluster_manager = CDSClusterManager()
 
 def log_request_params():
@@ -54,11 +56,26 @@ def delete_cluster(cluster_id):
 
 @app.route("/cluster/<cluster_id>/", methods=["PUT"])
 def update_cluster(cluster_id):
-    return "Stub: CDS Cluster Update of cluster_id '%s'" % (cluster_id)
+    log.info("Update Cluster: '%s'" % (cluster_id))
+    log_request_params()
+    data = request.get_json(force=True)
+    if "cluster_id" in data.keys():
+        del data["cluster_id"]
+    if "cdses" in data.keys():
+        cds_list = []
+        for h in data['cdses']:
+            cds = cds_manager.get(hostname=h) 
+            cds_list.append(cds)
+        data['cdses'] = cds_list
+    cluster = cluster_manager.update(cluster_id=cluster_id, **data)
+    return cluster.to_json()
 
 @app.route("/cluster/<cluster_id>/", methods=["GET"])
 def info_cluster(cluster_id):
-    return "Stub: CDS Cluster Info of cluster_id '%s'" % (cluster_id)
+    c = cluster_manager.get(cluster_id)
+    if not c:
+        raise MissingResource("No CDS Cluster with cluster_id: '%s'" % cluster_id)
+    return c.to_json()
 
 @app.route("/cluster/<cluster_id>/history", methods=["GET"])
 def cluster_sync_histories(cluster_id):

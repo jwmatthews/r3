@@ -13,6 +13,7 @@
 # if not, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 import logging
+from mongoengine.fields import *
 from pulp_cds.cds.exceptions import *
 from pulp_cds.cds.models.cds_cluster import Cluster
 
@@ -30,3 +31,19 @@ class CDSClusterManager():
 
     def get_all(self):
         return Cluster.objects()
+
+    def get(self, cluster_id):
+        c = Cluster.objects(cluster_id=cluster_id)
+        if len(c) < 1:
+            return None
+        return c[0]
+
+    def update(self, cluster_id, **params):
+        c = self.get(cluster_id)
+        if not c:
+            raise MissingResource("No Cluster with cluster_id: '%s'" % cluster_id)
+        for k in params.keys():
+            c[k] = params[k]
+        c.save()
+        cluster = Cluster.objects(cluster_id=cluster_id)
+        return cluster[0]
