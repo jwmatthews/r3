@@ -61,12 +61,7 @@ def update_cluster(cluster_id):
     data = request.get_json(force=True)
     if "cluster_id" in data.keys():
         del data["cluster_id"]
-    if "cdses" in data.keys():
-        cds_list = []
-        for h in data['cdses']:
-            cds = cds_manager.get(hostname=h) 
-            cds_list.append(cds)
-        data['cdses'] = cds_list
+
     cluster = cluster_manager.update(cluster_id=cluster_id, **data)
     return cluster.to_json()
 

@@ -86,10 +86,7 @@ class TestCDSCluster_API(base.BaseTestCase):
 
         self.assertEquals(len(cluster1["cdses"]), 0)
 
-        cds1 = CDS(hostname='unit_test_cds_1', cluster_id='unit_test_cluster')
-        cds1.save(force_insert=True)
-
-        data = {"cluster_id": cluster_id, "cdses": ['unit_test_cds_1']}
+        data = {"cluster_id": cluster_id, "cdses": ["unit_test_cds_1"]}
         json_data = json.dumps(data)
 
         resp = self.app.put("/cluster/%s/" % (cluster_id), data=json_data, content_type='application/json')
@@ -97,4 +94,4 @@ class TestCDSCluster_API(base.BaseTestCase):
 
         # Using json_util.loads so it can parse the {"$date":value} formats for created_at/updated_at
         cluster_updated = json_util.loads(resp.data)
-        self.assertNotEquals(len(cluster_updated["cdses"]), 0)
+        self.assertEquals(cluster_updated["cdses"], ['unit_test_cds_1'])
