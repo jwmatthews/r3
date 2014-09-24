@@ -10,6 +10,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 BuildRequires:  rpm-python
+BuildRequires:  python-setuptools
 
 Requires: mod_wsgi
 Requires: mod_ssl
