@@ -19,12 +19,21 @@ Conflicts: pulp-v2-cds-server
 A lightweight distribution system for pulp v2 content.
 
 %prep
-%setup -q 
+%setup -q -n rh-rhui-tools-%{version}
 
 %build
+pushd src
+%{__python} setup.py build
+popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+# Python setup
+pushd src
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+popd
+rm -f $RPM_BUILD_ROOT%{python_sitelib}/rhui*egg-info/requires.txt
 
 mkdir -p $RPM_BUILD_ROOT/etc/httpd/conf.d
 cp etc/httpd/conf.d/pulp-cds.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/
@@ -35,8 +44,11 @@ cp etc/pulp/repo_auth.conf $RPM_BUILD_ROOT/etc/pulp/
 mkdir -p $RPM_BUILD_ROOT/srv/pulp/
 cp srv/pulp/* $RPM_BUILD_ROOT/srv/pulp
 
-mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
-cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
+#mkdir -p $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
+#cp -r src/* $RPM_BUILD_ROOT/%{python_sitelib}/pulp/
+
+mkdir -p $RPM_BUILD_ROOT/usr/sbin/
+cp scripts/* $RPM_BUILD_ROOT/usr/sbin/
 
 mkdir -p $RPM_BUILD_ROOT/etc/pki/pulp/content
 
@@ -49,6 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,apache,apache,-)
 %{python_sitelib}/pulp/
+%attr(3775, root, root) /usr/sbin/generate_client_certs.py
 %attr(775, apache, apache) /srv/pulp
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
 %config(noreplace) %{_sysconfdir}/pulp/repo_auth.conf
