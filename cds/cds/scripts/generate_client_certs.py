@@ -2,7 +2,7 @@
 
 import sys
 from ConfigParser import SafeConfigParser
-from pulp.cds.repo_auth.repo_cert_utils import RepoCertUtils
+from pulp_cds.repo_auth.repo_cert_utils import RepoCertUtils
 from optparse import OptionParser
 
 if __name__ == "__main__":

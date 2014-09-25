@@ -13,8 +13,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-import pulp.cds.lb.application
+import pulp_cds.lb.application
 
 
 def application(environ, start_response):
-    return pulp.cds.lb.application.process_request(environ, start_response)
+    return pulp_cds.lb.application.process_request(environ, start_response)
