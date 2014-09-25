@@ -12,9 +12,10 @@ BuildArch:      noarch
 BuildRequires:  rpm-python
 BuildRequires:  python-setuptools
 
-Requires: mod_wsgi
-Requires: mod_ssl
-Conflicts: pulp-v2-cds-server
+Requires:       python >= 2.6
+Requires:       mod_wsgi
+Requires:       mod_ssl
+Conflicts:      pulp-v2-cds-server
 
 %description
 A lightweight distribution system for pulp v2 content.
@@ -61,7 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,apache,apache,-)
-%{python_sitelib}/pulp/
+%{python_sitelib}/pulp_cds/
 %attr(3775, root, root) /usr/sbin/generate_client_certs.py
 %attr(775, apache, apache) /srv/pulp
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
