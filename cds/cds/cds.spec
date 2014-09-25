@@ -63,6 +63,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,apache,apache,-)
 %{python_sitelib}/pulp_cds/
+%{python_sitelib}/pulp_cds*.egg-info
 %attr(3775, root, root) /usr/sbin/generate_client_certs.py
 %attr(775, apache, apache) /srv/pulp
 %config %{_sysconfdir}/httpd/conf.d/pulp-cds.conf
