@@ -1,5 +1,5 @@
 Name:           pulp-v2-cds
-Version:        1.0.4
+Version:        1.0.5
 Release:        1%{?dist}
 Summary:        A lightweight distribution system for pulp v2 content. 
 
@@ -91,6 +91,14 @@ semanage fcontext -d -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
 fi
 
 %changelog
+* Mon Sep 29 2014 David Gao <jinmaster923@gmail.com> 1.0.5-1
+- Oops forgot to alter path for wsgi and script files. (jinmaster923@gmail.com)
+- Changed setup.py project name. (jinmaster923@gmail.com)
+- Renamed folders from cds to pulp_cds. (jinmaster923@gmail.com)
+- Added python-setuptools to BuildRequires (jinmaster923@gmail.com)
+- Added scripts/generate_client_certs.py Updated spec file.
+  (jinmaster923@gmail.com)
+
 * Thu Aug 07 2014 David Gao <jinmaster923@gmail.com> 1.0.4-1
 - Added conflict rules. Clean up %%post selinux rule. (jinmaster923@gmail.com)
 - Moved appropriate configuration over to cds_api. (jinmaster923@gmail.com)
