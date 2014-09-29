@@ -16,7 +16,7 @@ from datetime import datetime
 
 from mongoengine import *
 
-from pulp_cds.cds.models.cds import CDS
+from pulp_cds.api.models.cds import CDS
 
 class Cluster(Document):
     #cluster_id = StringField(required=True, unique=True, primary_key=True)

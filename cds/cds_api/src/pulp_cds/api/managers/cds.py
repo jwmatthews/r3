@@ -14,8 +14,8 @@
 
 import logging
 
-from pulp_cds.cds.exceptions import *
-from pulp_cds.cds.models.cds import CDS
+from pulp_cds.api.exceptions import *
+from pulp_cds.api.models.cds import CDS
 
 log = logging.getLogger(__name__)
 

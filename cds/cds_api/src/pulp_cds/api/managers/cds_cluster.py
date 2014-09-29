@@ -14,8 +14,8 @@
 
 import logging
 from mongoengine.fields import *
-from pulp_cds.cds.exceptions import *
-from pulp_cds.cds.models.cds_cluster import Cluster
+from pulp_cds.api.exceptions import *
+from pulp_cds.api.models.cds_cluster import Cluster
 
 log = logging.getLogger(__name__)
 

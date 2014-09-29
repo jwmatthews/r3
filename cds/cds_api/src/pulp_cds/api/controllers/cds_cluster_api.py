@@ -15,11 +15,11 @@
 
 from flask import request
 
-from pulp_cds.cds import app
-from pulp_cds.cds.exceptions import *
-from pulp_cds.cds.managers.cds import CDSManager
-from pulp_cds.cds.managers.cds_cluster import CDSClusterManager
-from pulp_cds.cds.models.cds_cluster import Cluster
+from pulp_cds.api import app
+from pulp_cds.api.exceptions import *
+from pulp_cds.api.managers.cds import CDSManager
+from pulp_cds.api.managers.cds_cluster import CDSClusterManager
+from pulp_cds.api.models.cds_cluster import Cluster
 
 log = logging.getLogger(__name__)
 

@@ -9,13 +9,13 @@ else:
     # python 2.7 and greater
     import unittest
 
-from pulp_cds.cds import initialize
-from pulp_cds.cds.models.cds import CDS
-from pulp_cds.cds.models.cds_cluster import Cluster
+from pulp_cds.api import initialize
+from pulp_cds.api.models.cds import CDS
+from pulp_cds.api.models.cds_cluster import Cluster
 
-import pulp_cds.cds
+import pulp_cds.api
 config_file_for_unittests = os.path.join(os.path.abspath(os.path.dirname(__file__)), "./config/unittests.conf")
-pulp_cds.cds._config_files = [config_file_for_unittests]
+pulp_cds.api._config_files = [config_file_for_unittests]
 
 CONFIG_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "config/unittests.cfg")
 
@@ -28,9 +28,9 @@ class BaseTestCase(unittest.TestCase):
         Cluster.drop_collection()
 
     def setUp(self):
-        pulp_cds.cds.app.config['TESTING'] = True
-        pulp_cds.cds.initialize(CONFIG_FILE)
-        self.app = pulp_cds.cds.app.test_client()
+        pulp_cds.api.app.config['TESTING'] = True
+        pulp_cds.api.initialize(CONFIG_FILE)
+        self.app = pulp_cds.api.app.test_client()
         self.drop_collections()
 
     def tearDown(self):
