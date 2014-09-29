@@ -1,1 +1,1 @@
-nosetests -d -w test/unit 
+nosetests -d --nocapture -w test/unit 

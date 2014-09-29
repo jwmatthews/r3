@@ -25,5 +25,6 @@ class Cluster(Document):
     #cdses = ListField(ReferenceField(CDS))
     created_at = DateTimeField(required=True, default=datetime.utcnow())
     sync_schedule = StringField(required=False)
+    repos = ListField(StringField())
     meta = {'collection': 'cluster'}
 

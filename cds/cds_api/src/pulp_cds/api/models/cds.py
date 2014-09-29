@@ -17,9 +17,12 @@ from mongoengine import *
 
 class CDS(Document):
     hostname = StringField(required=True, unique=True)
+    display_name = StringField(required=False)
+    client_hostname = StringField(required=False)
     description = StringField(required=False)
     created_at = DateTimeField(required=True, default=datetime.utcnow())
     sync_schedule = StringField(required=False)
     cluster_id = StringField(required=True)
     meta = {'collection': 'cds'}
+    last_sync = DateTimeField(required=False)
 
