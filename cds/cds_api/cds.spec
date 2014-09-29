@@ -1,5 +1,5 @@
 Name:           pulp-v2-cds-server
-Version:        1.0.1
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Server plugin for pulp v2 server to distribute content.
 
@@ -62,6 +62,25 @@ semanage fcontext -d -t httpd_user_rw_content_t '/srv/pulp(/.*)?'
 fi
 
 %changelog
+* Mon Sep 29 2014 David Gao <jinmaster923@gmail.com> 1.0.2-1
+- Updated unit tests. (jinmaster923@gmail.com)
+- Renamed folders from cds to pulp_cds. (jinmaster923@gmail.com)
+- Updated model: 'cdses' is ['string'] (jinmaster923@gmail.com)
+- Added cluster info and update functionality. (jinmaster923@gmail.com)
+- Initial cds cluster list/create work. (jinmaster923@gmail.com)
+- Changed CDS model to have sync_schedule instead of update_time. Included
+  cluster_id to model (jinmaster923@gmail.com)
+- Fix: "sslv3 alert unexpected message"  Change wsgi config from:
+  SSLVerifyClient none to "SSLVerifyClient optional"  Prior to this on server
+  we saw messages like:  (103)Software caused connection abort: mod_wsgi
+  (pid=9429): Unable to get bucket brigade for request. (jwmatthews@gmail.com)
+- Updated python module for CDS from pulp.cds to pulp_cds.cds   Avoids conflict
+  with pulp's own module (jwmatthews@gmail.com)
+- Change import path from rhui_cds to pulp.cds (jinmaster923@gmail.com)
+- Moved installed source files from /usr/lib/python_2.x/site-packages/pulp to
+  /usr/lib/python_2.x/site-packages/pulp/cds/. (jinmaster923@gmail.com)
+- Added rhui/*.cfg to %%file section. (jinmaster923@gmail.com)
+
 * Thu Aug 07 2014 David Gao <jinmaster923@gmail.com> 1.0.1-1
 - new package built with tito
 
